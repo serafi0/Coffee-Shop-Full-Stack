@@ -9,18 +9,20 @@ AUTH0_DOMAIN = 'serafy-auth.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'udacity'
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 '''
 @TODO implement get_token_auth_header() method
@@ -31,21 +33,23 @@ class AuthError(Exception):
     return the token part of the header
 '''
 
+
 def get_token_auth_header():
-        # Check if Authorization is present in the header or not
-        if 'Authorization' not in request.headers:
-            abort(401)
+    # Check if Authorization is present in the header or not
+    if 'Authorization' not in request.headers:
+        abort(401)
 
-        # 'Authorization': 'Bearer <TOKEN>'
-        # ['Bearer', '<TOKEN>']
-        auth_header = request.headers['Authorization'].split(' ')
-        
-        if len(auth_header) != 2:
-            abort(401)
-        elif auth_header[0].lower() != 'bearer':
-            abort(401)
+    # 'Authorization': 'Bearer <TOKEN>'
+    # ['Bearer', '<TOKEN>']
+    auth_header = request.headers['Authorization'].split(' ')
 
-        return auth_header[1]
+    if len(auth_header) != 2:
+        abort(401)
+    elif auth_header[0].lower() != 'bearer':
+        abort(401)
+
+    return auth_header[1]
+
 
 '''
 @TODO implement check_permissions(permission, payload) method
@@ -58,14 +62,17 @@ def get_token_auth_header():
     it should raise an AuthError if the requested permission string is not in the payload permissions array
     return true otherwise
 '''
+
+
 def check_permissions(permission, payload):
-        if 'permissions' not in payload:
-            abort(400)
-        
-        if permission not in payload['permissions']:
-            abort(403)
-        
-        return True
+    if 'permissions' not in payload:
+        abort(400)
+
+    if permission not in payload['permissions']:
+        abort(403)
+
+    return True
+
 
 '''
 @TODO implement verify_decode_jwt(token) method
@@ -80,6 +87,8 @@ def check_permissions(permission, payload):
 
     !!NOTE urlopen has a common certificate error described here: https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
+
+
 def verify_decode_jwt(token):
     # GET THE PUBLIC KEY FROM AUTH0
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
@@ -152,6 +161,8 @@ def verify_decode_jwt(token):
     it should use the check_permissions method validate claims and check the requested permission
     return the decorator which passes the decoded payload to the decorated method
 '''
+
+
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
