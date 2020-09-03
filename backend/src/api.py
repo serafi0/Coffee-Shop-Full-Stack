@@ -16,7 +16,7 @@ CORS(app)
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-db_drop_and_create_all()
+# db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -122,8 +122,8 @@ def patch_drinks(payload, id):
     if drink is None:
         abort(404)
 
-    if new_recipe is None or new_title is None:
-        abort(400)
+    # if new_recipe is None or new_title is None:
+    #     abort(400)
 
     else:
         try:
@@ -244,8 +244,15 @@ def not_found(error):
 
 @app.errorhandler(AuthError)
 def auth_error(error):
+    error.status_code = 401
     return jsonify({
         "success": False,
-        "error": error.status_code,
+        "error": 401,
         "message": error.error['description']
     }), error.status_code
+
+# @APP.errorhandler(AuthError)
+# def handle_auth_error(ex):
+#     response = jsonify(ex.error)
+#     response.status_code = ex.status_code
+#     return response
