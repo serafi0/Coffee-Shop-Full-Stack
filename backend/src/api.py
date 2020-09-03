@@ -247,7 +247,7 @@ def auth_error(error):
     error.status_code = 401
     return jsonify({
         "success": False,
-        "error": 401,
+        "error": error.status_code,
         "message": error.error['description']
     }), error.status_code
 
